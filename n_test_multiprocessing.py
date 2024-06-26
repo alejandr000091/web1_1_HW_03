@@ -1,5 +1,8 @@
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 from time import time
+
+cpu_couter = cpu_count()
+# print(cpu_couter)
 
 def factorize(number):
     factors = []
@@ -9,7 +12,10 @@ def factorize(number):
     return factors
 
 def multi_factorize(*numbers):
-    with Pool(processes=len(numbers)) as pool:
+    process_len = len(numbers)
+    if process_len > cpu_couter:
+        process_len = cpu_couter
+    with Pool(processes=process_len) as pool:
         return pool.map(factorize, numbers)
 
 if __name__ == '__main__':
